@@ -204,6 +204,9 @@ public class Human extends Actor{
 		return effective;
 	}
 	
+	public ArrayList<Pathogen> getDiseases(){
+		return this.diseases;
+	}
 	public void infect(Human other){
 		int index =(int) (Math.random()*(this.diseases.size()));
 		other.getSick(this.diseases.get(index));
