@@ -16,6 +16,10 @@ public class Doctor extends Actor{
 		return effective;
 	}
 	
+	public boolean treat(Human patient){
+		return treat(patient, null);
+	}
+	
 	 public void act()
 	    {
 		 	Human currentPatient = appointments.pop();
