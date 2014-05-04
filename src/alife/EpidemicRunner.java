@@ -21,6 +21,8 @@ static Random rand = new Random();
 		spawnPathogens(5);
 		LinkedList<Location> loc = spawnDoctors(2, world);
 		spawnHumans(5,loc,world);
+		Tracker watcher = new Tracker(drugList, humanList);
+		world.add(world.getRandomEmptyLocation(), watcher);
 	    world.show();
     }
 	
@@ -37,6 +39,7 @@ static Random rand = new Random();
 			humanList.set(x, dude);
 			world.add(world.getRandomEmptyLocation(), dude);
 		}
+		
 	}
 	public static LinkedList<Location> spawnDoctors(int numDoctors, ActorWorld world){
 		LinkedList<Location> hospList= new LinkedList<Location>();

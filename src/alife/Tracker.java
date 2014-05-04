@@ -9,9 +9,9 @@ import info.gridworld.actor.Actor;
 public class Tracker extends Actor {
 	
 	private ArrayList<Drug> drugList = new ArrayList<Drug>();
-	private LinkedList<Human> humanList = new LinkedList<Human>();
+	private ArrayList<Human> humanList = new ArrayList<Human>();
 	
-	public Tracker(ArrayList<Drug> drugs,LinkedList<Human> humans ){
+	public Tracker(ArrayList<Drug> drugs,ArrayList<Human> humans ){
 		this.drugList = drugs;
 		this.humanList = humans;
 	}
