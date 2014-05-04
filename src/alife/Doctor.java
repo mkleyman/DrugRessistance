@@ -13,6 +13,9 @@ public class Doctor extends Actor{
 	private ArrayList<Drug> drugPool;
 	int patientsTreated = 0;
 	boolean free;
+	int cycleSize = 20;
+	private Drug treatment;
+	private HashMap<String,Integer> diseaseCountMap;
 
 	public boolean isFree(){
 		return this.free;
@@ -23,17 +26,59 @@ public class Doctor extends Actor{
 	}
 	public Doctor(ArrayList<Drug> drugPool){
 		this.drugPool = drugPool;
-		//this.free = true;
+		this.free = true;
+	}
+	public Doctor(ArrayList<Drug> drugPool, Drug drug){
+		this.drugPool = drugPool;
+		this.treatment = drug;
+		this.free = true;
+		this.diseaseCountMap = new HashMap<String,Integer>();
 	}
 	public boolean treat(Human patient, Drug treatment){
-		boolean effective = patient.takeDrug(treatment);
+		boolean effective = patient.takeDrug(this.drugPool.get(this.drugPool.size()-1));
 		treatment.update(effective);
 		return effective;
 	}
+	private void recordDiseases(Human patient){
+		for(Pathogen disease: patient.getDiseases()){
+			String code = disease.getGeneticCode();
+			if(this.diseaseCountMap.containsKey(code)){
+				this.diseaseCountMap.put(code, this.diseaseCountMap.get(code)+1);
+			}
+			else this.diseaseCountMap.put(code, 1);
+		}
+		
+		
+	}
 	/*will use one of the treatment methods below in here*/
 	public void treat(Human patient){
-		treatAll(patient);
-		this.free = true;
+		
+		this.recordDiseases(patient);
+		treat(patient,this.treatment);
+		//this.free = true;
+		patientsTreated++;
+	 	if (patientsTreated%cycleSize == 0){
+	 		this.createDrug();
+	 		//drugPool = Drug.evolveDrugs(drugPool, Drug.getMutationRate(), Drug.getCrossoverRate());
+	 		
+	 	}
+	}
+	private void createDrug(){
+		int max = -1;
+		String most = null;
+		for(String code: this.diseaseCountMap.keySet()){
+			if(this.diseaseCountMap.get(code) > max){
+				max = this.diseaseCountMap.get(code);
+				most = code;
+				
+			}
+		}
+		String best = xor(most,"11111111111111111111111111111111");
+		Drug drug = new Drug(best);
+		drugPool.remove(this.treatment);
+		this.treatment = drug;
+		drugPool.add(this.treatment);
+		this.diseaseCountMap = new HashMap<String,Integer>();
 	}
 	//treats patients with all the drugs
 	public void treatAll(Human patient){
@@ -41,13 +86,27 @@ public class Doctor extends Actor{
 			treat(patient, drug);
 		}
 	}
+	
+	public static String xor(String a, String b){
+		if(a.length() != b.length()){
+			return "Fail";
+		}
+		String results = "";
+		for(int i=0; i<a.length(); i++){
+			if(a.charAt(i)== b.charAt(i)) results= results+"0";
+			else  results= results+"1";
+		}
+		return results;
+	}
+	
+	
 	//trests patients with a random drug
 	public void treatBlind(Human patient){
 		int index =(int) (Math.random()*(this.drugPool.size()));
 		this.treat(patient, this.drugPool.get(index));
 	}
 	//treats patients with the overallbest drug
-	public void treatBest(Human patient){
+	/*public void treatBest(Human patient){
 		HashMap<Drug,Integer> countMap = new HashMap<Drug,Integer>();
 		for (Pathogen disease: patient.getDiseases()){
 			Drug best = null;
@@ -82,10 +141,10 @@ public class Doctor extends Actor{
 			}
 		}
 		this.treat(patient, best);
-	}
+	}*/
 
 	//treats patients with the best drug for each disease
-	public void treatBestAll(Human patient){
+	/*public void treatBestAll(Human patient){
 		for (Pathogen disease: patient.getDiseases()){
 			Drug best = null;
 			int most = -1;
@@ -105,7 +164,7 @@ public class Doctor extends Actor{
 			}
 			this.treat(patient, best);
 		}
-	}
+	}*/
 
 
 
@@ -114,7 +173,6 @@ public class Doctor extends Actor{
 	 public void act()
 	    {
 		 	//this is the variable controlling # to be treated
-		 	int cycleSize = 20;
 		 	if (appointments.size()>0){
 			 	if(free){
 			 		Human currentPatient = appointments.pop();
@@ -132,11 +190,7 @@ public class Doctor extends Actor{
 		            turn();
 		            steps = 0;
 		        }*/
-			 	patientsTreated++;
-			 	if (patientsTreated%cycleSize == 0){
-			 		drugPool = Drug.evolveDrugs(drugPool, Drug.getMutationRate(), Drug.getCrossoverRate());
-			 		
-			 	}
+			 	
 		 	}
 		 }
 	 }

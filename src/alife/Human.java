@@ -8,6 +8,7 @@ import info.gridworld.grid.Location;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -20,7 +21,8 @@ public class Human extends Actor{
 	private Location closestDoctor;
 	private boolean timeForAppointment = false;
 	private boolean madeAppointment = false;
-	private double infectionRate  = .3;
+	private double infectionRate  = 1;
+	private HashSet<String> immune = new  HashSet<String>();
 	//private HashMap<Drug, Integer> treatments = new HashMap<Drug, Integer>();
 
 
@@ -187,9 +189,12 @@ public class Human extends Actor{
 	}
 
 	public void getSick(Pathogen disease){
-		diseases.add(disease);
-		sick = true;
-		this.setColor(Color.RED);
+		if(!immune.contains(disease.getGeneticCode())){
+			diseases.add(disease);
+			sick = true;
+			this.setColor(Color.RED);
+		}
+		
 	}
 	
 	public ArrayList<Actor> getNeighbors(){
@@ -198,20 +203,28 @@ public class Human extends Actor{
 	}
 	//takes a drug from the doctor
 	public boolean takeDrug(Drug treatment){
+		System.out.println("Try Drug");
 		boolean effective = false; 
 		this.madeAppointment = false;
 		this.daysTillVisit =24;
 		this.timeForAppointment = false;
 		for(int i=0;i<this.diseases.size(); i++){
-			int result = treatment.getGeneticCode()^diseases.get(i).getGeneticCode();
-			String resultString = Integer.toBinaryString(result);
+			String resultString = Doctor.xor(treatment.getGeneticCode(),diseases.get(i).getGeneticCode());
+			//String resultString = Integer.toBinaryString(result);
 			int count = 0; 
+			System.out.println(resultString);
 			for(char c: resultString.toCharArray()){
 				if(c == '1'){
 					count++;
 				}
 			}
+			//System.out.println("count");
+			//System.out.println(count);
 			if(count>=21){
+				//System.out.println("Drug Worked");
+				immune.add(diseases.get(i).getGeneticCode());
+				//this.sick = false;
+				//this.setColor(Color.BLUE);
 				diseases.remove(i);
 				effective = true;
 			}
@@ -262,7 +275,7 @@ public class Human extends Actor{
 		}
 		return list;
 	}
-	
+	/*
 		public ArrayList<Pathogen> evolvePathogen(double mutationRate, double crossoverRate){
 		//determine number of pathogens
 		ArrayList<Pathogen> bugList = consolodateDiseases();
@@ -273,10 +286,10 @@ public class Human extends Actor{
 		int last = 0;
 		ArrayList<Integer> intList = new ArrayList<Integer>();
 		int x,y,z;
-		x = 0;
+		x = 0;*/
 		/*each Pathogen has a number range corresponding to their fitness level,
 		 * which is relative to the general population. */
-		for(Pathogen d: bugList){
+		/*for(Pathogen d: bugList){
 			intList.set(x, (int) (d.getFitness(diseases)*100 + last));
 			last = intList.get(x);
 			x++;
@@ -299,10 +312,10 @@ public class Human extends Actor{
 					if (random<=intList.get(y)){
 						tempBugList.add(mutate(bugList.get(y),mutationRate, rand));
 					}
-				}
+				}*/
 			/*generate a random number in the range 0-100, and find which range it 
 			 * falls in. The Pathogen corresponding to that range gets selected as a parent*/
-			}else{
+			/*}else{
 				random = rand.nextInt(intListSize);
 				//get first parent
 				for(y = 0; y<size; y++){
@@ -324,7 +337,7 @@ public class Human extends Actor{
 				}
 				//crossover point
 				random = rand.nextInt(32)+1;
-				String parent1 = Integer.toBinaryString(first.getGeneticCode());
+				String parent1 = first.getGeneticCode());
 				String parent2 = Integer.toBinaryString(second.getGeneticCode());
 				int length = parent1.length();
 				while(length<32){
@@ -336,7 +349,7 @@ public class Human extends Actor{
 				}
 				String child = parent1.substring(0, random) + parent2.substring(random);
 				//if desired, mutate here
-				tempBugList.add(new Pathogen(Integer.parseInt(child,2)));
+				//tempBugList.add(new Pathogen(child,2));
 			}	
 		}
 		//update the Pathogen list
@@ -369,6 +382,6 @@ public class Human extends Actor{
 			return new Pathogen(Integer.parseInt(bugString,2));
 		}
 		return bug;
-	}
+	}*/
 
 }

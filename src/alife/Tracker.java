@@ -22,12 +22,12 @@ public class Tracker extends Actor {
 			if(person.isSick()){
 				sickCount++;
 				for(Pathogen disease: person.getDiseases()){
-					if(diseaseCounter.containsKey(Integer.toBinaryString(disease.getGeneticCode()))){
-						diseaseCounter.put(Integer.toBinaryString(disease.getGeneticCode()), diseaseCounter.get(Integer.toBinaryString(disease.getGeneticCode()))+1);
+					if(diseaseCounter.containsKey((disease.getGeneticCode()))){
+						diseaseCounter.put((disease.getGeneticCode()), diseaseCounter.get((disease.getGeneticCode()))+1);
 						//diseaseCounter.put(Integer.toBinaryString(disease.getGeneticCode()), 1);
 					}
 					else{
-						diseaseCounter.put(Integer.toBinaryString(disease.getGeneticCode()), 1);
+						diseaseCounter.put((disease.getGeneticCode()), 1);
 					}
 				}
 			}
@@ -39,7 +39,7 @@ public class Tracker extends Actor {
 		}
 		System.out.println("Current fitness of treatments:");
 		for(Drug drug : this.drugList){
-			System.out.println(Integer.toBinaryString(drug.getGeneticCode())+" : "+drug.getFitness());
+			System.out.println(drug.getGeneticCode()+" : "+drug.getFitness());
 		}
 	}
 	

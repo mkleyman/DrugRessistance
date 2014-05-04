@@ -15,25 +15,26 @@ public class EpidemicRunner {
 static ArrayList<Human> humanList;
 static ArrayList<Doctor> doctorList;
 static ArrayList<Pathogen> pathogenList;
-static ArrayList<Drug> drugList;
+static ArrayList<Drug> drugList = new ArrayList<Drug>();
 static Random rand = new Random();
 	public static void main(String[] args)
     {
 		ActorWorld world = new ActorWorld(new BoundedGrid(50,50));
 		spawnPathogens(5);
-		spawnDrugs(3);
-		LinkedList<Location> loc = spawnDoctors(2, world);
-		spawnHumans(30,loc,world);
-		infectRandom(10);
+		//spawnDrugs(1);
+		LinkedList<Location> loc = spawnDoctors(12, world);
+		spawnHumans(50,loc,world);
+		infectRandom(1);
 		
 		Tracker watcher = new Tracker(drugList, humanList);
+		watcher.setColor(Color.BLACK);
 		world.add(world.getRandomEmptyLocation(), watcher);
 	    world.show();
     }
 	public static void spawnDrugs(int numDrugs){
 		drugList = new ArrayList<Drug>();
 		for(int x = 0; x<numDrugs; x++){
-			drugList.add(new Drug(rand.nextInt()));
+			drugList.add(new Drug(Integer.toBinaryString(rand.nextInt())));
 		}
 	}
 	public static void spawnPathogens(int numBugs){
@@ -56,7 +57,10 @@ static Random rand = new Random();
 		doctorList = new ArrayList<Doctor>();
 		for(int x = 0; x<numDoctors; x++){
 			//there is no constructor, I'm not sure how this will work
-			Doctor dudeMD = new Doctor(drugList);
+			Drug d = new Drug("11111111111111111111111111111111");
+			drugList.add(d);
+			Doctor dudeMD = new Doctor(drugList,d);
+			dudeMD.setColor(Color.YELLOW);
 			doctorList.add(dudeMD);
 			Location loc = world.getRandomEmptyLocation();
 			hospList.add(loc);

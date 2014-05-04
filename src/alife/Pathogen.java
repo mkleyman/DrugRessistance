@@ -4,15 +4,21 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Pathogen {
-	private Integer geneticCode;
+	private String geneticCode;
 	private static Random codeGen = new Random();
 	private static Double mutationRate = .05;
 	private static Double crossoverRate = .1;
-	public Pathogen(int gene){
+	public Pathogen(String gene){
 		this.geneticCode = gene;
 	}
 	public Pathogen(){
-		geneticCode = codeGen.nextInt();
+		String code = "";
+		for(int i =0; i<32;i++){
+			double rand = Math.random();
+			if(rand<.5) code+="1";
+			else code+="0";
+		}
+		geneticCode = code;
 	}
 	public static Double getMutationRate(){
 		return mutationRate;
@@ -33,7 +39,7 @@ public class Pathogen {
 
 	
 	
-	public Integer getGeneticCode(){
+	public String getGeneticCode(){
 		return this.geneticCode;
 	}
 	
