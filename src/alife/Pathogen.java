@@ -6,12 +6,19 @@ import java.util.Random;
 public class Pathogen {
 	private Integer geneticCode;
 	private static Random codeGen = new Random();
-	
+	private static Double mutationRate = .05;
+	private static Double crossoverRate = .1;
 	public Pathogen(int gene){
 		this.geneticCode = gene;
 	}
 	public Pathogen(){
 		geneticCode = codeGen.nextInt();
+	}
+	public static Double getMutationRate(){
+		return mutationRate;
+	}
+	public static Double getCrossoverRate(){
+		return crossoverRate;
 	}
 	
 	public double getFitness(ArrayList<Pathogen> list){
