@@ -8,19 +8,22 @@ import info.gridworld.actor.Actor;
 import info.gridworld.actor.Bug;
 
 public class Doctor extends Actor{
-	private int steps  = 0;
-	private int sideLength = 6;
+
 	private LinkedList<Human> appointments = new LinkedList<Human>();
 	private ArrayList<Drug> drugPool;
-	
+	int patientsTreated = 0;
+
+	public Doctor(ArrayList<Drug> drugPool){
+		this.drugPool = drugPool;
+	}
 	public boolean treat(Human patient, Drug treatment){
 		boolean effective = patient.takeDrug(treatment);
 		treatment.update(effective);
 		return effective;
 	}
-	
+	/*will use one of the treatment methods below in here*/
 	public void treat(Human patient){
-		
+
 	}
 	//treats patients with all the drugs
 	public void treatAll(Human patient){
@@ -53,7 +56,7 @@ public class Doctor extends Actor{
 					most = count;
 				}
 			}
-			
+
 			if(countMap.containsKey(best)){
 				countMap.put(best,countMap.get(best)+1);
 			}
@@ -70,7 +73,7 @@ public class Doctor extends Actor{
 		}
 		this.treat(patient, best);
 	}
-	
+
 	//treats patients with the best drug for each disease
 	public void treatBestAll(Human patient){
 		for (Pathogen disease: patient.getDiseases()){
@@ -93,26 +96,35 @@ public class Doctor extends Actor{
 			this.treat(patient, best);
 		}
 	}
-	
-	
-	
-	
-	
+
+
+
+
+/*number to be treated before updating will have to be changed in here*/
 	 public void act()
 	    {
-		 	Human currentPatient = appointments.pop();
-		 	currentPatient.callForVisit();
-		 	/*if (steps < sideLength && canMove())
-	        {
-	            move();
-	            steps++;
-	        }
-	        else
-	        {
-	            turn();
-	            turn();
-	            steps = 0;
-	        }*/
+		 	//this is the variable controlling # to be treated
+		 	int cycleSize = 20;
+		 	if (appointments.size()>0){
+			 	Human currentPatient = appointments.pop();
+			 	currentPatient.callForVisit();
+			 	/*if (steps < sideLength && canMove())
+		        {
+		            move();
+		            steps++;
+		        }
+		        else
+		        {
+		            turn();
+		            turn();
+		            steps = 0;
+		        }*/
+			 	patientsTreated++;
+			 	if (patientsTreated%cycleSize == 0){
+			 		drugPool = Drug.evolveDrugs(drugPool, Drug.getMutationRate(), Drug.getCrossoverRate());
+			 		
+			 	}
+		 	}
 	    }
 	 public void makeAppointment(Human patient){
 		 this.appointments.add(patient);
