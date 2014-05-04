@@ -5,6 +5,7 @@ import info.gridworld.actor.Bug;
 import info.gridworld.grid.Grid;
 import info.gridworld.grid.Location;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -178,6 +179,7 @@ public class Human extends Actor{
 	public void getSick(Pathogen disease){
 		diseases.add(disease);
 		sick = true;
+		this.setColor(Color.RED);
 	}
 	//takes a drug from the doctor
 	public boolean takeDrug(Drug treatment){
@@ -201,6 +203,7 @@ public class Human extends Actor{
 		}
 		if(this.diseases.size()==0){
 			this.sick = false;
+			this.setColor(Color.BLUE);
 		}
 		return effective;
 	}
