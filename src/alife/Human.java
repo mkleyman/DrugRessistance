@@ -162,6 +162,9 @@ public class Human extends Actor{
 
 
 	      }
+	       if(sick){
+	    	  diseases = evolvePathogen(Pathogen.getMutationRate(),Pathogen.getCrossoverRate());
+	      }
 
 	}
 
