@@ -12,6 +12,7 @@ public class Doctor extends Actor{
 	private LinkedList<Human> appointments = new LinkedList<Human>();
 	private ArrayList<Drug> drugPool;
 	int patientsTreated = 0;
+	boolean free = true;
 
 	public Doctor(ArrayList<Drug> drugPool){
 		this.drugPool = drugPool;
@@ -23,6 +24,7 @@ public class Doctor extends Actor{
 	}
 	/*will use one of the treatment methods below in here*/
 	public void treat(Human patient){
+		this.free = true;
 		treatAll(patient);
 	}
 	//treats patients with all the drugs
@@ -108,6 +110,7 @@ public class Doctor extends Actor{
 		 	if (appointments.size()>0){
 			 	Human currentPatient = appointments.pop();
 			 	currentPatient.callForVisit();
+			 	this.free = false;
 			 	/*if (steps < sideLength && canMove())
 		        {
 		            move();
