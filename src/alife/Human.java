@@ -257,7 +257,7 @@ public class Human extends Actor{
 		return list;
 	}
 	
-	public ArrayList<Pathogen> evolvePathogen(double mutationRate, double crossoverRate){
+		public ArrayList<Pathogen> evolvePathogen(double mutationRate, double crossoverRate){
 		//determine number of pathogens
 		ArrayList<Pathogen> bugList = consolodateDiseases();
 		int size = bugList.size();
@@ -364,6 +364,5 @@ public class Human extends Actor{
 		}
 		return bug;
 	}
-
 
 }
