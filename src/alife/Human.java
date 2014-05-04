@@ -31,6 +31,10 @@ public class Human extends Actor{
 	 public void callForVisit(){
 		 this.timeForAppointment = true;
 	 }
+	 
+	 public boolean isTimeForAppointment(){
+		 return this.timeForAppointment;
+	 }
 	 //moves the human forward
 	 public void move(){
 		 Grid<Actor> gr = getGrid();
@@ -163,7 +167,7 @@ public class Human extends Actor{
 
 	      }
 	       if(sick){
-	    	  diseases = evolvePathogen(Pathogen.getMutationRate(),Pathogen.getCrossoverRate());
+	    	  // diseases = evolvePathogen(Pathogen.getMutationRate(),Pathogen.getCrossoverRate());
 	      }
 
 	}
@@ -216,6 +220,9 @@ public class Human extends Actor{
 
 	public ArrayList<Pathogen> getDiseases(){
 		return this.diseases;
+	}
+	public int numDiseases(){
+		return this.diseases.size();
 	}
 	public void infect(Human other){
 		int index =(int) (Math.random()*(this.diseases.size()));
@@ -330,7 +337,7 @@ public class Human extends Actor{
 		diseases = tempBugList;
 		//reset treatment stats for all Pathogens. This isn't necessary
 		// unless we add field data for pathogens so i removed it
-		
+		System.out.println("its xyan fault: "+tempBugList.size()  );
 		return tempBugList;
 
 	}

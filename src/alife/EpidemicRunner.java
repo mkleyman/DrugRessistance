@@ -24,6 +24,8 @@ static Random rand = new Random();
 		spawnDrugs(3);
 		LinkedList<Location> loc = spawnDoctors(2, world);
 		spawnHumans(20,loc,world);
+		infectRandom(4);
+		
 		Tracker watcher = new Tracker(drugList, humanList);
 		world.add(world.getRandomEmptyLocation(), watcher);
 	    world.show();

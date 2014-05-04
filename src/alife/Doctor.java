@@ -23,7 +23,7 @@ public class Doctor extends Actor{
 	}
 	/*will use one of the treatment methods below in here*/
 	public void treat(Human patient){
-
+		treatAll(patient);
 	}
 	//treats patients with all the drugs
 	public void treatAll(Human patient){

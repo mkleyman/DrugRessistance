@@ -23,23 +23,23 @@ public class Tracker extends Actor {
 				sickCount++;
 				for(Pathogen disease: person.getDiseases()){
 					if(diseaseCounter.containsKey(Integer.toBinaryString(disease.getGeneticCode()))){
-						diseaseCounter.put(Integer.toBinaryString(disease.getGeneticCode()), diseaseCounter.get(disease.getGeneticCode())+1);
+						diseaseCounter.put(Integer.toBinaryString(disease.getGeneticCode()), diseaseCounter.get(Integer.toBinaryString(disease.getGeneticCode()))+1);
+						//diseaseCounter.put(Integer.toBinaryString(disease.getGeneticCode()), 1);
 					}
 					else{
 						diseaseCounter.put(Integer.toBinaryString(disease.getGeneticCode()), 1);
 					}
 				}
 			}
-			System.out.println(sickCount+" out of "+humanList.size()+" are currently sick" );
-			System.out.println("Current frequency of diseases:");
-			for(String code : diseaseCounter.keySet()){
-				System.out.println(code+" : "+diseaseCounter.get(code));
-			}
-			System.out.println("Current fitness of treatments:");
-			for(Drug drug : this.drugList){
-				System.out.println(Integer.toBinaryString(drug.getGeneticCode())+" : "+drug.getFitness());
-			}
-			
+		}
+		System.out.println(sickCount+" out of "+humanList.size()+" are currently sick" );
+		System.out.println("Current frequency of diseases:");
+		for(String code : diseaseCounter.keySet()){
+			System.out.println(code+" : "+diseaseCounter.get(code));
+		}
+		System.out.println("Current fitness of treatments:");
+		for(Drug drug : this.drugList){
+			System.out.println(Integer.toBinaryString(drug.getGeneticCode())+" : "+drug.getFitness());
 		}
 	}
 	
