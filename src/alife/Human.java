@@ -175,6 +175,9 @@ public class Human extends Actor{
 		this.hospitalDirectory = directory;
 	}
 
+	public boolean isSick(){
+		return this.sick;
+	}
 
 	public void getSick(Pathogen disease){
 		diseases.add(disease);
