@@ -59,13 +59,13 @@ public class Drug {
 		Random rand = new Random();
 		//roulette wheel
 		int last = 0;
-		ArrayList<Integer> intList = new ArrayList<Integer>();
+		ArrayList<Integer> intList = new ArrayList<Integer>(size);
 		int x,y,z;
 		x = 0;
 		/*each drug has a number range corresponding to their fitness level,
 		 * which is relative to the general population. */
 		for(Drug d: drugList){
-			intList.set(x, (int) (d.getFitness()*100 + last));
+			intList.add((int) (d.getFitness()*100 + last));
 			last = intList.get(x);
 			x++;
 		}
@@ -155,7 +155,14 @@ public class Drug {
 				drugString = first+'1'+second;
 			}
 			//if desired, mutate here
-			return new Drug(Integer.parseInt(drugString,2));
+			try{
+				return new Drug(Integer.parseInt(drugString,2));
+			}catch(Exception e){
+				System.out.println("!!!!Error!!!!!");
+				System.out.println(drugString);
+				System.out.println("!!!!Error!!!!!");
+				
+			}
 		}
 		return drug;
 	}
