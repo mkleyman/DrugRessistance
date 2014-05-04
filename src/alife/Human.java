@@ -116,19 +116,19 @@ public class Human extends Actor{
 			 this.infectNeighbors();
 		 }
 		 //makes an appointment to the nearest doctor
-	      if(sick && this.daysTillVisit==0 && !this.madeAppointment){
+	      if(sick && this.daysTillVisit==0 && !this.madeAppointment ){
 	    	  this.closestDoctor = this.findNearestDoctor();
 	    	  ((Doctor)(this.getGrid().get(this.closestDoctor))).makeAppointment(this);
 	    	  this.madeAppointment = true;
 	      }
 	      //goes to the nearest doctor
 	      if(this.timeForAppointment){
+	    	  this.askForTreatment();
 	    	  int dir =this.getLocation().getDirectionToward(this.closestDoctor);
 	    	  this.setDirection(dir);
 	    	  if(this.canMove()){
 	    		  this.move();
-	    	  }
-	    	  this.askForTreatment();
+	    	  } 
 	      }
 	      //wanders in circles
 	      else if(this.madeAppointment){
@@ -191,6 +191,11 @@ public class Human extends Actor{
 		sick = true;
 		this.setColor(Color.RED);
 	}
+	
+	public ArrayList<Actor> getNeighbors(){
+
+		return this.getGrid().getNeighbors(this.getLocation());
+	}
 	//takes a drug from the doctor
 	public boolean takeDrug(Drug treatment){
 		boolean effective = false; 
@@ -238,6 +243,7 @@ public class Human extends Actor{
 		 for(Actor doc: gr.getNeighbors(loc)){
 			 if(doc instanceof Doctor){
 				 ((Doctor)doc).treat(this);
+				 ((Doctor)doc).free();
 			 }
 		 }
 	}

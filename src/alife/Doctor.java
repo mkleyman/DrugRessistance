@@ -12,10 +12,18 @@ public class Doctor extends Actor{
 	private LinkedList<Human> appointments = new LinkedList<Human>();
 	private ArrayList<Drug> drugPool;
 	int patientsTreated = 0;
-	boolean free = true;
+	boolean free;
 
+	public boolean isFree(){
+		return this.free;
+	}
+	
+	public void free(){
+		this.free = true;
+	}
 	public Doctor(ArrayList<Drug> drugPool){
 		this.drugPool = drugPool;
+		//this.free = true;
 	}
 	public boolean treat(Human patient, Drug treatment){
 		boolean effective = patient.takeDrug(treatment);
@@ -24,8 +32,8 @@ public class Doctor extends Actor{
 	}
 	/*will use one of the treatment methods below in here*/
 	public void treat(Human patient){
-		this.free = true;
 		treatAll(patient);
+		this.free = true;
 	}
 	//treats patients with all the drugs
 	public void treatAll(Human patient){
@@ -108,9 +116,11 @@ public class Doctor extends Actor{
 		 	//this is the variable controlling # to be treated
 		 	int cycleSize = 20;
 		 	if (appointments.size()>0){
-			 	Human currentPatient = appointments.pop();
-			 	currentPatient.callForVisit();
-			 	this.free = false;
+			 	if(free){
+			 		Human currentPatient = appointments.pop();
+				 	currentPatient.callForVisit();
+				 	this.free = false;
+			 	
 			 	/*if (steps < sideLength && canMove())
 		        {
 		            move();
@@ -128,7 +138,8 @@ public class Doctor extends Actor{
 			 		
 			 	}
 		 	}
-	    }
+		 }
+	 }
 	 public void makeAppointment(Human patient){
 		 this.appointments.add(patient);
 	 }
