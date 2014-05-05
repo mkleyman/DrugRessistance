@@ -24,6 +24,7 @@ public class Human extends Actor{
 	private boolean madeAppointment = false;
 	private double infectionRate  = 1;
 	private HashSet<String> immune;
+	private int drugStrength =29;
 	//private HashMap<Drug, Integer> treatments = new HashMap<Drug, Integer>();
 
 
@@ -206,11 +207,12 @@ public class Human extends Actor{
 		return this.getGrid().getNeighbors(this.getLocation());
 	}
 	//takes a drug from the doctor
-	public boolean takeDrug(Drug treatment){
-		System.out.println("Try Drug");
+	public int takeDrug(Drug treatment){
+		//System.out.println("Try Drug");
 		boolean effective = false; 
 		this.madeAppointment = false;
 		this.daysTillVisit =24;
+		int effectiveCount  = 0;
 		this.timeForAppointment = false;
 		for(int i=0;i<this.diseases.size(); i++){
 			String resultString = Doctor.xor(treatment.getGeneticCode(),diseases.get(i).getGeneticCode());
@@ -224,20 +226,21 @@ public class Human extends Actor{
 			}
 			//System.out.println("count");
 			//System.out.println(count);
-			if(count>=29){
-				System.out.println("Drug Worked");
+			if(count>=this.drugStrength){
+				//System.out.println("Drug Worked");
 				immune.add(diseases.get(i).getGeneticCode());
 				this.sick = false;
 				this.setColor(Color.BLUE);
 				diseases.remove(i);
 				effective = true;
+				effectiveCount++;
 			}
 		}
 		if(this.diseases.size()==0){
 			this.sick = false;
 			this.setColor(Color.BLUE);
 		}
-		return effective;
+		return effectiveCount;
 	}
 	
 	public String printImmunity(){

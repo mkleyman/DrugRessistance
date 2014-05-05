@@ -29,6 +29,11 @@ public class Drug {
 		return this.geneticCode;
 	}
 	
+	public void update(int effective, int total){
+		this.numberCured+=effective;
+		this.numberTreated+=total;
+	}
+	
 	public void resetFitness(){
 		this.numberTreated = 0;
 		this.numberCured = 0;

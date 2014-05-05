@@ -41,9 +41,10 @@ public class Doctor extends Actor{
 		this.diseaseCountMap = countMap;
 	}
 	public boolean treat(Human patient, Drug treatment){
-		boolean effective = patient.takeDrug(this.treatment);
-		treatment.update(effective);
-		return effective;
+		int total = patient.getDiseases().size();
+		int effective = patient.takeDrug(this.treatment);
+		treatment.update(effective, total);
+		return (effective>0);
 	}
 	private void recordDiseases(Human patient){
 		for(Pathogen disease: patient.getDiseases()){
