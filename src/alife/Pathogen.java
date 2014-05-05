@@ -6,7 +6,7 @@ import java.util.Random;
 public class Pathogen {
 	private String geneticCode;
 	private static Random codeGen = new Random();
-	private static Double mutationRate = .05;
+	private static Double mutationRate = .00001;
 	private static Double crossoverRate = .1;
 	public Pathogen(String gene){
 		this.geneticCode = gene;
@@ -22,6 +22,9 @@ public class Pathogen {
 	}
 	public static Double getMutationRate(){
 		return mutationRate;
+	}
+	public void setGeneticCode(String code){
+		this.geneticCode = code;
 	}
 	public static Double getCrossoverRate(){
 		return crossoverRate;

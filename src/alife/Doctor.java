@@ -3,6 +3,7 @@ package alife;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.concurrent.ConcurrentHashMap;
 
 import info.gridworld.actor.Actor;
 import info.gridworld.actor.Bug;
@@ -15,7 +16,7 @@ public class Doctor extends Actor{
 	boolean free;
 	int cycleSize = 20;
 	private Drug treatment;
-	private HashMap<String,Integer> diseaseCountMap;
+	private ConcurrentHashMap<String,Integer> diseaseCountMap;
 
 	public boolean isFree(){
 		return this.free;
@@ -32,10 +33,15 @@ public class Doctor extends Actor{
 		this.drugPool = drugPool;
 		this.treatment = drug;
 		this.free = true;
-		this.diseaseCountMap = new HashMap<String,Integer>();
+		this.diseaseCountMap = new ConcurrentHashMap<String,Integer>();
+	}
+	public Doctor(Drug drug, ConcurrentHashMap<String,Integer> countMap){
+		this.treatment = drug;
+		this.free = true;
+		this.diseaseCountMap = countMap;
 	}
 	public boolean treat(Human patient, Drug treatment){
-		boolean effective = patient.takeDrug(this.drugPool.get(this.drugPool.size()-1));
+		boolean effective = patient.takeDrug(this.treatment);
 		treatment.update(effective);
 		return effective;
 	}
@@ -56,12 +62,15 @@ public class Doctor extends Actor{
 		this.recordDiseases(patient);
 		treat(patient,this.treatment);
 		//this.free = true;
-		patientsTreated++;
+		/*patientsTreated++;
 	 	if (patientsTreated%cycleSize == 0){
 	 		this.createDrug();
 	 		//drugPool = Drug.evolveDrugs(drugPool, Drug.getMutationRate(), Drug.getCrossoverRate());
 	 		
-	 	}
+	 	}*/
+	}
+	public String drugCode(){
+		return this.treatment.getGeneticCode();
 	}
 	private void createDrug(){
 		int max = -1;
@@ -75,10 +84,10 @@ public class Doctor extends Actor{
 		}
 		String best = xor(most,"11111111111111111111111111111111");
 		Drug drug = new Drug(best);
-		drugPool.remove(this.treatment);
+		//drugPool.remove(this.treatment);
 		this.treatment = drug;
-		drugPool.add(this.treatment);
-		this.diseaseCountMap = new HashMap<String,Integer>();
+		//drugPool.add(this.treatment);
+		this.diseaseCountMap = new ConcurrentHashMap<String,Integer>();
 	}
 	//treats patients with all the drugs
 	public void treatAll(Human patient){

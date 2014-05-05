@@ -22,9 +22,16 @@ public class Drug {
 		this.numberCured = 0;
 	}
 	
-
+	public void setGeneticCode(String code){
+		this.geneticCode = code;
+	}
 	public String getGeneticCode(){
 		return this.geneticCode;
+	}
+	
+	public void resetFitness(){
+		this.numberTreated = 0;
+		this.numberCured = 0;
 	}
 	/*This is just equal to numberCured. I believe the intent was to have
 	 * this represent what percentage of all successful treatments were
@@ -43,10 +50,10 @@ public class Drug {
 	}
 	public void update(boolean effective){
 		this.numberTreated++;
-		this.totalTreated++;
+		//this.totalTreated++;
 		if(effective){
 			this.numberCured++;
-			this.totalCured++;
+			//this.totalCured++;
 		}
 	}
 }

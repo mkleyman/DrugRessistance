@@ -7,6 +7,7 @@ import info.gridworld.grid.Location;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -22,7 +23,7 @@ public class Human extends Actor{
 	private boolean timeForAppointment = false;
 	private boolean madeAppointment = false;
 	private double infectionRate  = 1;
-	private HashSet<String> immune = new  HashSet<String>();
+	private HashSet<String> immune;
 	//private HashMap<Drug, Integer> treatments = new HashMap<Drug, Integer>();
 
 
@@ -110,6 +111,7 @@ public class Human extends Actor{
 		 }
 	 }
 	 public void act(){
+		 this.mutateDiseases();
 		 //makes there there is a pause before the next doctor visit
 		 if(this.daysTillVisit>0){
 			 this.daysTillVisit--;
@@ -133,7 +135,7 @@ public class Human extends Actor{
 	    	  } 
 	      }
 	      //wanders in circles
-	      else if(this.madeAppointment){
+	      /*else if(this.madeAppointment){
 	    	  if(this.canMove()){
 	    		  double rand=Math.random();
 	    		  if (rand<.4){
@@ -148,7 +150,7 @@ public class Human extends Actor{
 	    	  else{
 	    		  this.turnRight();
 	    	  }
-	      }
+	      }*/
 	      //wanders mostly in straight lines
 	      else{
 	    	  if(this.canMove()){
@@ -173,15 +175,17 @@ public class Human extends Actor{
 	      }
 
 	}
-
+	
 	public Human(){
 		this.diseases = new ArrayList<Pathogen> ();
 		this.sick = false;
+		this.immune = new HashSet<String>();
 	}
 	public Human(LinkedList<Location> directory){
 		this.diseases = new ArrayList<Pathogen> ();
 		this.sick = false;
 		this.hospitalDirectory = directory;
+		this.immune = new HashSet<String>();
 	}
 
 	public boolean isSick(){
@@ -220,11 +224,11 @@ public class Human extends Actor{
 			}
 			//System.out.println("count");
 			//System.out.println(count);
-			if(count>=21){
-				//System.out.println("Drug Worked");
+			if(count>=29){
+				System.out.println("Drug Worked");
 				immune.add(diseases.get(i).getGeneticCode());
-				//this.sick = false;
-				//this.setColor(Color.BLUE);
+				this.sick = false;
+				this.setColor(Color.BLUE);
 				diseases.remove(i);
 				effective = true;
 			}
@@ -235,6 +239,14 @@ public class Human extends Actor{
 		}
 		return effective;
 	}
+	
+	public String printImmunity(){
+		String result  = "";
+		for(String code: immune){
+			result+=code+"\n";
+		}
+		return result;
+	}
 
 	public ArrayList<Pathogen> getDiseases(){
 		return this.diseases;
@@ -244,7 +256,19 @@ public class Human extends Actor{
 	}
 	public void infect(Human other){
 		int index =(int) (Math.random()*(this.diseases.size()));
-		other.getSick(this.diseases.get(index));
+		other.getSick(new Pathogen(this.diseases.get(index).getGeneticCode()));
+	}
+	
+	public String getDiseaseCodes(){
+		HashSet<String> diseaseSet = new HashSet<String> ();
+		for(Pathogen disease: this.diseases){
+			diseaseSet.add(disease.getGeneticCode());
+		}
+		String result= "";
+		for(String  disease: diseaseSet){
+			result+= disease+"\n";
+		}
+		return result;
 	}
 
 	public void askForTreatment(){
@@ -274,6 +298,47 @@ public class Human extends Actor{
 			}
 		}
 		return list;
+	}
+	
+	private void mutateDiseases(){
+		LinkedList<Pathogen> crossOverPool = new LinkedList<Pathogen>();
+		for(Pathogen disease: this.diseases){
+			double rand = Math.random();
+			if(rand<disease.getMutationRate()){
+				disease.setGeneticCode(mutate(disease.getGeneticCode()));
+			}
+			if(rand<disease.getCrossoverRate()){
+				crossOverPool.add(disease);
+			}
+		}
+		this.crossover(crossOverPool);
+	}
+	private String mutate(String code){
+		int rand = (int) (Math.random()*code.length());
+		char[] codeArray = code.toCharArray();
+		if(codeArray[rand]=='1') codeArray[rand]='0';
+		else codeArray[rand]='1';
+		String mutant = new String (codeArray);
+		return mutant;
+	}
+	
+	private void crossover(LinkedList<Pathogen> chroms){
+		Collections.shuffle(chroms);
+		if(chroms.size()%2==1) chroms.pop();
+		while(!chroms.isEmpty()){
+			char[] chrom1 = chroms.get(0).getGeneticCode().toCharArray();
+			char[] chrom2 = chroms.get(1).getGeneticCode().toCharArray();
+			int rand = (int) (Math.random()*chrom1.length);
+			for(int i=0; i<rand; i++){
+				char holder = chrom1[i];
+				chrom1[i]=chrom2[i];
+				chrom2[i] = holder;
+			}
+			chroms.get(0).setGeneticCode(new String(chrom1));
+			chroms.get(1).setGeneticCode(new String(chrom2));
+			chroms.pop();
+			chroms.pop();
+		}
 	}
 	/*
 		public ArrayList<Pathogen> evolvePathogen(double mutationRate, double crossoverRate){
