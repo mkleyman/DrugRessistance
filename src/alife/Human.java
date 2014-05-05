@@ -310,6 +310,7 @@ public class Human extends Actor{
 			if(rand<disease.getMutationRate()){
 				disease.setGeneticCode(mutate(disease.getGeneticCode()));
 			}
+			rand = Math.random();
 			if(rand<disease.getCrossoverRate()){
 				crossOverPool.add(disease);
 			}

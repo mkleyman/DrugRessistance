@@ -28,9 +28,9 @@ static Random rand = new Random();
 		spawnPathogens(1);
 		//spawnDrugs(1);
 		
-		LinkedList<Location> loc = spawnDoctors(2, world);
+		LinkedList<Location> loc = spawnDoctors(10, world);
 		spawnHumans(50,loc,world);
-		infectRandom(1);
+		infectRandom(2);
 		Tracker watcher = new Tracker( humanList, treatment, diseaseCountMap);
 		watcher.setColor(Color.BLACK);
 		world.add(world.getRandomEmptyLocation(), watcher);
@@ -89,6 +89,7 @@ static Random rand = new Random();
 	 * population*/
 	public static void infectRandom(int x){
 		//get the size of the pathogenList
+		Pathogen disease = new Pathogen();
 		int pathSize = 0;
 		for(Pathogen bug: pathogenList){
 			pathSize++;
